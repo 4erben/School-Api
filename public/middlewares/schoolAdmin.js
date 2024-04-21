@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../schema/userModel");
+const User = require("../Models/userModel");
 
 const schoolAdminAuth = async(req,res,next)=>{
     const auth = req.headers.authorization;

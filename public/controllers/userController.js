@@ -1,4 +1,4 @@
-const User = require("../schema/userModel");
+const User = require("../Models/userModel");
 const jwt = require("jsonwebtoken");
 
 const createToken = (payload)=>{
@@ -28,7 +28,6 @@ try{
 //login controller
 const loginUser = async (req,res)=>{
     const { username , password} = req.body;
-    console.log(username,password);
     try{
         const email = await User.login(username,password);
         const {displayName, authLvl, school ,_id} = email;

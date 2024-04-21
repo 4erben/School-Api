@@ -1,0 +1,367 @@
+swagger: "2.0"
+info:
+  description: School API
+  version: 1.0.0
+  title: A School API
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+
+securityDefinitions:
+  schoolAdminAuth: # Define the schoolAdminAuth middleware as a security definition
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Authorization header using the schoolAdminAuth scheme. Example: 'Authorization: Bearer {token}'"
+  superAdminAuth: # Define the superAdminAuth middleware as a security definition
+    type: apiKey
+    name: Authorization
+    in: header
+    description: "Authorization header using the superAdminAuth scheme. Example: 'Authorization: Bearer {token}'"
+
+paths:
+  /signup:
+    post:
+      tags:
+        - Sign Up
+      summary: Sign Up
+      security: 
+      - superAdminAuth: []
+      parameters:
+        - in: body
+          name: body
+          description: Sign Up
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+              displayName:
+                type: string
+              school:
+                type: string
+              authLvl:
+                type: number
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+  /signin:
+    post:
+      tags:
+        - Sign In
+      summary: Sign In
+      security: []
+      parameters:
+        - in: body
+          name: body
+          description: Sign In
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+  /schools:
+    get:
+      tags:
+      - Schools
+      summary: Get all schools
+      security: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+  /students:
+    get:
+      tags:
+        - Students
+      summary: Get all students
+      security: []
+      responses:
+        "200":
+          description: OK
+  /school:
+    get:
+      tags:
+        - School
+      summary: Get school by name
+      parameters:
+        - in: query
+          name: name
+          description: Name of the school
+          required: true
+          type: string
+      security: []
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: School not found
+        "400":
+          description: Bad request
+
+    post:
+      tags:
+        - School
+      summary: Create a new school
+      parameters:
+        - in: body
+          name: body
+          description: School object
+          required: true
+          schema:
+            type: object
+            properties:
+              schoolName:
+                type: string
+      security:
+        - superAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    patch:
+      tags:
+        - School
+      summary: Update an existing school
+      parameters:
+        - in: body
+          name: body
+          description: School object with old and new name
+          required: true
+          schema:
+            type: object
+            properties:
+              schoolName:
+                type: string
+              newName:
+                type: string
+      security:
+        - superAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    delete:
+      tags:
+        - School
+      summary: Delete an existing school
+      parameters:
+        - in: body
+          name: body
+          description: School name
+          required: true
+          schema:
+            type: object
+            properties:
+              schoolName:
+                type: string
+      security:
+        - superAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+  /class:
+    get:
+      tags:
+        - Class
+      summary: Get class by school and class name
+      parameters:
+        - in: query
+          name: schoolName
+          description: Name of the school
+          required: true
+          type: string
+        - in: query
+          name: className
+          description: Name of the class
+          required: true
+          type: string
+      security: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    post:
+      tags:
+        - Class
+      summary: Create a new class
+      parameters:
+        - in: body
+          name: body
+          description: Class object
+          required: true
+          schema:
+            type: object
+            properties:
+              className:
+                type: string
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    patch:
+      tags:
+        - Class
+      summary: Update an existing class
+      parameters:
+        - in: body
+          name: body
+          description: Class object with old and new class name, student name, and student ID to remove
+          required: true
+          schema:
+            type: object
+            properties:
+              className:
+                type: string
+                description: The name of the class to be updated
+              newClassName:
+                type: string
+                description: The new name for the class
+              studentName:
+                type: string
+                description: The name of the student to add to the class
+              removeStudentId:
+                type: string
+                description: The ID of the student to remove from the class
+            required: 
+            - className
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    delete:
+      tags:
+        - Class
+      summary: Delete an existing class
+      parameters:
+        - in: body
+          name: body
+          description: Class name
+          required: true
+          schema:
+            type: object
+            properties:
+              className:
+                type: string
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+  /student:
+    get:
+      tags:
+        - Student
+      summary: Get student by name
+      parameters:
+        - in: query
+          name: name
+          description: Name of the student
+          required: true
+          type: string
+      security: []
+      responses:
+        "200":
+          description: OK
+
+    post:
+      tags:
+        - Student
+      summary: Create a new student
+      parameters:
+        - in: body
+          name: body
+          description: Student object
+          required: true
+          schema:
+            type: object
+            properties:
+              studentName:
+                type: string
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    patch:
+      tags:
+        - Student
+      summary: Update an existing student
+      parameters:
+        - in: body
+          name: body
+          description: Student object with old and new student name
+          required: true
+          schema:
+            type: object
+            properties:
+              studentName:
+                type: string
+              newName:
+                type: string
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+
+    delete:
+      tags:
+        - Student
+      summary: Delete an existing student
+      parameters:
+        - in: body
+          name: body
+          description: Student name
+          required: true
+          schema:
+            type: object
+            properties:
+              studentName:
+                type: string
+      security:
+        - schoolAdminAuth: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+  

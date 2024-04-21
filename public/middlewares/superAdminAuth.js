@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../schema/userModel");
+const User = require("../Models/userModel");
 
 const superAdminAuth = async(req,res,next)=>{
     // verify there is a authorization headers on the request
