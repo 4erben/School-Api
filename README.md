@@ -1,2 +1,2 @@
-#School Api
+# School Api
 ## Documentation on /api-docs
