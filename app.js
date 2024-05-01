@@ -35,6 +35,11 @@ const connectDB = async()=>{
     }
 }
 
+//redirecting to the api documentation
+app.get("/",(req,res)=>{
+    res.redirect("/api-docs");
+})
+
 //using the routes
 app.use("/school",schoolRouter);
 app.use("/schools",schoolsRouter);
@@ -43,11 +48,6 @@ app.use("/students",studentsRouter);
 app.use("/student",studentRouter);
 app.use("/signup",signupRouter);
 app.use("/signin",signinRouter);
-
-
-
-
-
 
 
 connectDB().then(()=>{
